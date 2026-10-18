@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "rm -f vercel.json && if find . -name '*.md' | grep .; then echo 'a Markdown file would be published' >&2; exit 1; fi",
+  "outputDirectory": ".",
+  "trailingSlash": true,
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ."
+}

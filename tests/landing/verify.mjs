@@ -13,7 +13,7 @@
 //
 // Gates (ONLY= names):
 //   files     the copied tokens match src/styles.css (tokens.mjs --check),
-//             theme.js's chrome colours, CNAME, the Pages workflow's pins,
+//             theme.js's chrome colours, docs/vercel.json,
 //             the files the site needs;
 //   links     every same-site link, anchor and resource in every file of
 //             docs/ (HTML, CSS, llms.txt, agents.txt, robots.txt, sitemap,
@@ -74,6 +74,9 @@ import { mkdir, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
+// The app lives in its own repository (MAECLY/versorium-app); the site copies
+// its tokens and quotes its files, so the checks read a clone of it.
+const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const DOCS = process.env.DOCS_DIR ?? path.join(ROOT, "docs");
 const SITE = process.env.SITE_URL ?? "http://localhost:8700";
 const OUT = "/tmp/versorium-landing/verify";
@@ -903,7 +906,7 @@ async function checkLinks() {
     }
     return ids.get(file);
   };
-  /** A URL path on the site → the file GitHub Pages would serve, or null. */
+  /** A URL path on the site → the file Vercel would serve, or null. */
   const target = async (pathname) => {
     const p = path.join(DOCS, decodeURIComponent(pathname));
     const st = await exists(p);
@@ -967,7 +970,7 @@ async function checkLinks() {
         fail(`links ${rel}`, `javascript: URL ${raw}`);
         continue;
       }
-      // GitHub Pages serves 404.html at any missing path, so a relative URL there breaks one level down.
+      // Vercel serves 404.html at any missing path, so a relative URL there breaks one level down.
       if (rel === "404.html" && !/^(\/|#|https?:)/.test(raw)) fail(`links ${rel}`, `${raw} is relative; at /a/b/ it would not resolve`);
       const url = new URL(raw.replace(/&amp;/g, "&"), here);
       if (url.origin !== PUBLIC) {
@@ -1034,24 +1037,16 @@ async function checkFiles() {
   } catch {
     fail("tokens", "docs/assets/site.css tokens differ from src/styles.css");
   }
-  const css = await readFile(path.join(ROOT, "src/styles.css"), "utf8");
+  const css = await readFile(path.join(APP, "src/styles.css"), "utf8");
   const js = await readFile(path.join(DOCS, "assets/theme.js"), "utf8");
   for (const variant of ["folio-light", "folio-dark", "quarry-light", "quarry-dark", "needle-light", "needle-dark"]) {
     const block = css.match(new RegExp(`\\[data-theme="${variant}"\\][^{]*\\{([^}]*)\\}`))[1];
     const app = block.match(/--bg-app:\s*(#[0-9a-f]+)/)[1];
     if (!js.includes(`"${variant}": "${app}"`)) fail("theme.js", `${variant} chrome colour is not ${app}`);
   }
-  const cname = (await readFile(path.join(DOCS, "CNAME"), "utf8")).trim();
-  if (cname !== "versorium.maecly.com") fail("CNAME", cname);
-  const workflow = await readFile(path.join(ROOT, ".github/workflows/pages.yml"), "utf8");
-  for (const pin of [
-    "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1",
-    "actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0",
-    "actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0",
-    "actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1",
-  ]) {
-    if (!workflow.includes(pin)) fail("pages.yml", `missing ${pin}`);
-  }
+  // /en must answer as /en/, the address every link and the sitemap use.
+  const vercel = JSON.parse(await readFile(path.join(ROOT, "docs/vercel.json"), "utf8"));
+  if (vercel.trailingSlash !== true) fail("vercel.json", "trailingSlash is not true");
   for (const file of ["robots.txt", "sitemap.xml", "llms.txt", "agents.txt", "site.webmanifest", "404.html", "favicon.ico", "assets/paper.svg", "assets/fonts/aguja-display-400.woff2", "assets/fonts/OFL.txt", "comparar/index.html", "en/compare/index.html"]) {
     try {
       await readFile(path.join(DOCS, file));

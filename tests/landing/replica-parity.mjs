@@ -37,10 +37,13 @@ import path from "node:path";
 import { history, novels } from "./novel.mjs";
 
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
+// The app lives in its own repository (MAECLY/versorium-app); the site copies
+// its tokens and quotes its files, so the checks read a clone of it.
+const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const SITE = process.env.SITE_URL ?? "http://localhost:8700";
 /** A file of the app: from the working tree, or as committed at APP_REF. */
 const appFile = async (rel) =>
-  process.env.APP_REF ? execFileSync("git", ["-C", ROOT, "show", `${process.env.APP_REF}:${rel}`], { encoding: "utf8" }) : readFile(path.join(ROOT, rel), "utf8");
+  process.env.APP_REF ? execFileSync("git", ["-C", APP, "show", `${process.env.APP_REF}:${rel}`], { encoding: "utf8" }) : readFile(path.join(APP, rel), "utf8");
 const annotations = JSON.parse(await readFile(path.join(ROOT, "tests/landing/out/annotations.json"), "utf8"));
 const problems = [];
 const bad = (where, what) => problems.push(`${where}: ${what}`);

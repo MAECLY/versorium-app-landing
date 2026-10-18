@@ -42,6 +42,9 @@ import { pathToFileURL } from "node:url";
 import { history, novels } from "./novel.mjs";
 
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
+// The app lives in its own repository (MAECLY/versorium-app); the site copies
+// its tokens and quotes its files, so the checks read a clone of it.
+const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const APP = process.env.APP_URL ?? "http://localhost:1420/";
 const RAW = process.env.RAW_DIR ?? "/tmp/versorium-landing/raw";
 
@@ -60,7 +63,7 @@ export const PINNED = new Set(["settings-pinned"]);
 
 /** The real catalogue, shaped as the models_view command returns it. */
 export async function catalogue() {
-  const raw = JSON.parse(await readFile(path.join(ROOT, "models/catalog.json"), "utf8"));
+  const raw = JSON.parse(await readFile(path.join(APP, "models/catalog.json"), "utf8"));
   // Two writing models on disk, the rest offered for download: a machine a
   // week into using the app, not one that downloaded everything.
   const ready = new Set(["qwen3-4b-instruct-2507-q4km", "gemma4-12b-it-q5km"]);

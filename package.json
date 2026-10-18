@@ -1,0 +1,14 @@
+{
+  "name": "versorium-app-landing",
+  "private": true,
+  "type": "module",
+  "description": "The landing page of Versorium, versorium.maecly.com",
+  "scripts": {
+    "serve": "python3 -m http.server 8700 --directory docs",
+    "verify": "node tests/landing/verify.mjs",
+    "tokens": "node tests/landing/tokens.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
+  }
+}

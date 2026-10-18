@@ -95,7 +95,7 @@ if (browser) try {
   for (const route of ["/", "/en/"]) {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
     const page = await context.newPage();
-    // GitHub Pages gzips text; the local server does not, so text is counted
+    // Vercel compresses text; the local server does not, so text is counted
     // at its gzip size. Lazy images Chrome fetches ahead of the scroll (its
     // look-ahead margin, not the page's choice) are listed apart.
     const got = [];

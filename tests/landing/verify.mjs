@@ -76,7 +76,7 @@ import path from "node:path";
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
 // The app lives in its own repository (MAECLY/versorium-app); the site copies
 // its tokens and quotes its files, so the checks read a clone of it.
-const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
+const APP_DIR = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const DOCS = process.env.DOCS_DIR ?? path.join(ROOT, "docs");
 const SITE = process.env.SITE_URL ?? "http://localhost:8700";
 const OUT = "/tmp/versorium-landing/verify";
@@ -1037,7 +1037,7 @@ async function checkFiles() {
   } catch {
     fail("tokens", "docs/assets/site.css tokens differ from src/styles.css");
   }
-  const css = await readFile(path.join(APP, "src/styles.css"), "utf8");
+  const css = await readFile(path.join(APP_DIR, "src/styles.css"), "utf8");
   const js = await readFile(path.join(DOCS, "assets/theme.js"), "utf8");
   for (const variant of ["folio-light", "folio-dark", "quarry-light", "quarry-dark", "needle-light", "needle-dark"]) {
     const block = css.match(new RegExp(`\\[data-theme="${variant}"\\][^{]*\\{([^}]*)\\}`))[1];

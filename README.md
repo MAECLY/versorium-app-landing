@@ -15,8 +15,10 @@ and the scripts that check it.
 
 Vercel project `versorium-landing-page` (team `migelangelecs-projects`), Git
 connected to this repository with root directory `docs/`. A push to `main`
-publishes to production; any other branch gets a preview. A commit that
-changes nothing under `docs/` is skipped (`ignoreCommand`).
+publishes to production; any other branch gets a preview. A push that
+changes nothing under `docs/` since the last deployment is skipped
+(`ignoreCommand`). The `versorium-landing-page.vercel.app` host redirects to
+the domain.
 
 DNS lives in Cloudflare: `versorium.maecly.com` is a CNAME to the host Vercel
 recommends for the project, **DNS only** (not proxied), like the other

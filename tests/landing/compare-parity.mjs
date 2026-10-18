@@ -37,7 +37,7 @@ import { firstRelease, LANDING_COPY, PAGE } from "./compare-build.mjs";
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
 // The app lives in its own repository (MAECLY/versorium-app); the site copies
 // its tokens and quotes its files, so the checks read a clone of it.
-const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
+const APP_DIR = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const DOCS = process.env.DOCS_DIR ?? path.join(ROOT, "docs");
 const SITE = process.env.SITE_URL ?? "http://localhost:8700";
 const problems = [];
@@ -120,7 +120,7 @@ else if (age > 90) warnings.push(`the comparison was read on ${AS_OF}, ${age} da
 
 // Rule 9 (repository side), rule 11: the licence.
 const release = firstRelease();
-const git = (...a) => execFileSync("git", ["-C", ROOT, ...a], { stdio: "pipe" }).toString().trim();
+const git = (...a) => execFileSync("git", ["-C", APP_DIR, ...a], { stdio: "pipe" }).toString().trim();
 const tags = git("tag", "--list", "v*", "--sort=-v:refname").split("\n").filter(Boolean);
 // The landing's note names a series (v0.1); its sources cite the first release and the series' newest.
 const series = byId.versorium.landing.note.en.match(/^v(\d+\.\d+) · /)?.[1];
@@ -133,7 +133,7 @@ else if (series && !cited.startsWith(`v${series}.`)) bad("source vs-release", `c
 else if (inSeries[0] && inSeries[0] !== cited) warnings.push(`${inSeries[0]} is newer than the release Versorium's column cites (${cited}): check the column against it, then cite it (vs-release)`);
 if (!SOURCES["vs-first"].url.endsWith(`/releases/tag/${release.tag}`)) bad("source vs-first", `does not cite the first release, ${release.tag}`);
 if (tags[0] && !inSeries.includes(tags[0])) warnings.push(`${tags[0]} is out: Versorium's column names v${series}`);
-const licence = (await readFile(path.join(APP, "LICENSE"), "utf8")).slice(0, 400);
+const licence = (await readFile(path.join(APP_DIR, "LICENSE"), "utf8")).slice(0, 400);
 if (!/GNU AFFERO GENERAL PUBLIC LICENSE/.test(licence) || !/Version 3/.test(licence)) bad("licence", "LICENSE is not the GNU AGPL v3 the pages name");
 for (const a of [byId.versorium.open, byId.versorium.landing.threeNote]) if (!/AGPL-3\.0|código abierto|open source/.test(`${a.es} ${a.en}`)) bad("licence", `Versorium's cell “${a.en}”`);
 

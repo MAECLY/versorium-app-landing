@@ -1,7 +1,6 @@
 // Gate G3 (site spec §12.6): every link that leaves the site answers, and the
-// site itself is served on its domain with a valid certificate. It cannot pass
-// while the repository is private (G1) and Pages is off (G2); it is the check
-// to run before promoting the page, not a CI step until then.
+// site itself is served on its domain with a valid certificate. It is the
+// check to run before promoting the page, not a CI step.
 //
 //   node tests/landing/links-live.mjs
 

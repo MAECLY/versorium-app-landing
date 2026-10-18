@@ -15,8 +15,8 @@ import path from "node:path";
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
 // The app lives in its own repository (MAECLY/versorium-app); the site copies
 // its tokens and quotes its files, so the checks read a clone of it.
-const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
-const css = await readFile(path.join(APP, "src/styles.css"), "utf8");
+const APP_DIR = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
+const css = await readFile(path.join(APP_DIR, "src/styles.css"), "utf8");
 
 const VARIANTS = ["folio-light", "folio-dark", "quarry-light", "quarry-dark", "needle-light", "needle-dark"];
 

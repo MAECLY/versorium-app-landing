@@ -19,17 +19,19 @@ import path from "node:path";
 import { APPS, AS_OF, FOUNDING, GROUPS, LANDING, LANDING_ROWS, SOURCES, TABLE_A, TABLE_B } from "./comparison-data.mjs";
 
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
+// The release tags are the app's (MAECLY/versorium-app); this repository has none.
+const APP_DIR = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
 const args = process.argv.slice(2);
 const DOCS = args.includes("--docs") ? path.resolve(args[args.indexOf("--docs") + 1]) : path.join(ROOT, "docs");
 const REPO = "https://github.com/MAECLY/versorium-app";
 
 /** The first release: its tag, its date and how many changes led to it. */
 export function firstRelease() {
-  const tags = execFileSync("git", ["-C", ROOT, "tag", "--list", "v*", "--sort=creatordate"]).toString().split("\n").filter(Boolean);
+  const tags = execFileSync("git", ["-C", APP_DIR, "tag", "--list", "v*", "--sort=creatordate"]).toString().split("\n").filter(Boolean);
   const tag = tags[0];
-  const commits = Number(execFileSync("git", ["-C", ROOT, "rev-list", "--count", tag]).toString().trim());
-  const date = execFileSync("git", ["-C", ROOT, "log", "-1", "--format=%cs", tag]).toString().trim();
-  const first = execFileSync("git", ["-C", ROOT, "log", "--reverse", "--format=%cs", tag]).toString().split("\n")[0];
+  const commits = Number(execFileSync("git", ["-C", APP_DIR, "rev-list", "--count", tag]).toString().trim());
+  const date = execFileSync("git", ["-C", APP_DIR, "log", "-1", "--format=%cs", tag]).toString().trim();
+  const first = execFileSync("git", ["-C", APP_DIR, "log", "--reverse", "--format=%cs", tag]).toString().split("\n")[0];
   return { tag, commits, date, first };
 }
 

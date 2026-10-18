@@ -5,5 +5,8 @@
   "buildCommand": "rm -f vercel.json && if find . -name '*.md' | grep .; then echo 'a Markdown file would be published' >&2; exit 1; fi",
   "outputDirectory": ".",
   "trailingSlash": true,
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- ."
+  "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- .",
+  "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "versorium-landing-page.vercel.app" }], "destination": "https://versorium.maecly.com/:path*", "permanent": true }
+  ]
 }

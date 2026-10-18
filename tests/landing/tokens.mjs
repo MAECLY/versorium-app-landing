@@ -17,8 +17,8 @@ import path from "node:path";
 const ROOT = path.resolve(new URL("../..", import.meta.url).pathname);
 // The app lives in its own repository (MAECLY/versorium-app); the site copies
 // its tokens and quotes its files, so the checks read a clone of it.
-const APP = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
-const APP_CSS = path.join(APP, "src/styles.css");
+const APP_DIR = process.env.VERSORIUM_APP_DIR ?? path.resolve(ROOT, "../versorium-app");
+const APP_CSS = path.join(APP_DIR, "src/styles.css");
 // DOCS_DIR points the check at another copy of docs/ (verify-selftest.mjs).
 const SITE_CSS = path.join(process.env.DOCS_DIR ?? path.join(ROOT, "docs"), "assets/site.css");
 const BEGIN = "/* tokens:begin — copied from src/styles.css by tests/landing/tokens.mjs; do not edit by hand */";
@@ -29,7 +29,7 @@ export async function appTokens() {
   // Comments belong to the app's file, not to the copy; none sit inside a token block.
   // APP_REF=HEAD compares with the app as committed rather than the working tree.
   const source = process.env.APP_REF
-    ? execFileSync("git", ["-C", APP, "show", `${process.env.APP_REF}:src/styles.css`], { encoding: "utf8" })
+    ? execFileSync("git", ["-C", APP_DIR, "show", `${process.env.APP_REF}:src/styles.css`], { encoding: "utf8" })
     : await readFile(APP_CSS, "utf8");
   const css = source.replace(/\/\*[\s\S]*?\*\//g, "");
   const rules = [];

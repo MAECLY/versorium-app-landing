@@ -7,6 +7,6 @@
   "trailingSlash": true,
   "ignoreCommand": "git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- .",
   "redirects": [
-    { "source": "/:path*", "has": [{ "type": "host", "value": "versorium-landing-page.vercel.app" }], "destination": "https://versorium.maecly.com/:path*", "permanent": true }
+    { "source": "/(.*)", "has": [{ "type": "host", "value": "versorium-landing-page.vercel.app" }], "destination": "https://versorium.maecly.com/$1", "permanent": true }
   ]
 }

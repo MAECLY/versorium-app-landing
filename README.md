@@ -1,5 +1,7 @@
 # versorium-app-landing
 
+[![Stars](https://img.shields.io/github/stars/MAECLY/versorium-app-landing?style=flat-square)](https://github.com/MAECLY/versorium-app-landing/stargazers) [![Views](https://hits.sh/github.com/MAECLY/versorium-app-landing.svg?label=views&style=flat-square)](https://hits.sh/github.com/MAECLY/versorium-app-landing/) [![Last commit](https://img.shields.io/github/last-commit/MAECLY/versorium-app-landing?style=flat-square)](https://github.com/MAECLY/versorium-app-landing/commits/main)
+
 The landing page of [Versorium](https://github.com/MAECLY/versorium-app), served
 at **https://versorium.maecly.com**. The app's code, releases and project
 documents stay in `MAECLY/versorium-app`; this repository holds only the site

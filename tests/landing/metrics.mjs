@@ -50,7 +50,7 @@ check("en groups with a comma", formatCount(1234, "en") === "1,234");
 check("small numbers are not grouped", formatCount(208, "es") === "208");
 check("es label", metricText("downloads", 208, "es") === "208 descargas");
 check("en label", metricText("downloads", 208, "en") === "208 downloads");
-check("singular", metricText("downloads", 1, "es") === "1 descarga" && metricText("stars", 1, "en") === "1 star on GitHub");
+check("singular", metricText("downloads", 1, "es") === "1 descarga" && metricText("stars", 1, "en") === "1 star");
 check("zero says nothing", metricText("downloads", 0, "es") === "" && metricText("stars", 0, "en") === "");
 check("unknown says nothing", metricText("downloads", null, "en") === "" && metricText("downloads", NaN, "en") === "");
 
@@ -86,7 +86,7 @@ for (const [file, lang, words] of [["index.html", "es", "208 descargas"], ["en/i
   const failed = bake(html, { downloads: null, stars: null });
   check(`${file}: on failure nothing is shown`, !failed.includes("data-metric") && !failed.includes("interactionStatistic") && failed === html.replace("<!--metric:stars--><!--metric:downloads-->", ""));
   const stars = bake(html, { downloads: 1234, stars: 3 });
-  check(`${file}: stars beside the source link`, stars.includes(lang === "es" ? "Código abierto</a> · <span class=\"metric\" data-metric=\"stars\">3 estrellas en GitHub</span> · <span class=\"metric\" data-metric=\"downloads\">1.234 descargas</span>" : "Open source</a> · <span class=\"metric\" data-metric=\"stars\">3 stars on GitHub</span> · <span class=\"metric\" data-metric=\"downloads\">1,234 downloads</span>"));
+  check(`${file}: stars beside the source link`, stars.includes(lang === "es" ? "Código abierto</a> · <span class=\"metric\" data-metric=\"stars\">3 estrellas</span> · <span class=\"metric\" data-metric=\"downloads\">1.234 descargas</span>" : "Open source</a> · <span class=\"metric\" data-metric=\"stars\">3 stars</span> · <span class=\"metric\" data-metric=\"downloads\">1,234 downloads</span>"));
 }
 
 // The build bakes, then never publishes the script.

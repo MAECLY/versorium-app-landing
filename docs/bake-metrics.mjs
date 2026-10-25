@@ -27,8 +27,8 @@ export const REPO = "MAECLY/versorium-app";
 const API = "https://api.github.com";
 
 const LABELS = {
-  es: { downloads: ["descarga", "descargas"], stars: ["estrella en GitHub", "estrellas en GitHub"], sep: "." },
-  en: { downloads: ["download", "downloads"], stars: ["star on GitHub", "stars on GitHub"], sep: "," },
+  es: { downloads: ["descarga", "descargas"], stars: ["estrella", "estrellas"], sep: "." },
+  en: { downloads: ["download", "downloads"], stars: ["star", "stars"], sep: "," },
 };
 
 /** 1234 → "1.234" (es) or "1,234" (en), grouping from four digits on. */

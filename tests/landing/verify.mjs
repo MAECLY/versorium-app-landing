@@ -38,6 +38,9 @@
 //   motion    nothing hidden by motion, in Chrome, WebKit and Firefox, with
 //             and without script, motion allowed and reduced
 //             (motion-safety.mjs, both languages);
+//   metrics   the reach line (docs/bake-metrics.mjs): a number only when
+//             GitHub gave it and it is above zero, nothing on failure or 0,
+//             grouped by language, the same count in the JSON-LD (metrics.mjs);
 //   compare   the comparison (landing section IV and /comparar/, /en/compare/)
 //             says what tests/landing/comparison-data.mjs says: every cell,
 //             dash, quote, amount, source and date, the release facts from
@@ -1144,6 +1147,10 @@ if (gate("parity")) {
   gatesRun.push("parity");
   runScript("parity", "language-parity.mjs");
   runScript("parity", "faq-ld-parity.mjs", [SITE]);
+}
+if (gate("metrics")) {
+  gatesRun.push("metrics");
+  runScript("metrics", "metrics.mjs");
 }
 if (gate("replica")) {
   gatesRun.push("replica");

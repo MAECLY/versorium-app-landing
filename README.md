@@ -11,6 +11,7 @@ and the scripts that check it.
 |---|---|
 | `docs/` | The site, published as is: Spanish at `/`, English at `/en/` |
 | `docs/vercel.json` | How Vercel serves it (static, `/en` → `/en/`; the build fails on any Markdown file) |
+| `docs/bake-metrics.mjs` | Run by the Vercel build, then deleted: writes the app's GitHub downloads (and stars, when above zero) into the hero line; on any API failure nothing is shown |
 | `tests/landing/` | The checks and the scripts that made the screenshots, clips and fonts |
 
 ## Deploys
